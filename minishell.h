@@ -18,6 +18,8 @@ typedef struct s_line
     t_list  **arr;
     char    **chunks;
     char    **env;
+    char    *expanded_var;
+    char    *temp;
 } t_line;
 
 void    parse_line(t_line *l);
@@ -27,6 +29,9 @@ void    fillup_arr_list(t_line *l);
 t_list  parse_chunk(t_line *l);
 
 void    split_plus_plus(char *str, int x);
+
+void    remove_quotes(char *str, char quote_type);
+void    build_new_expanded_string(t_line *l,  int x);
 
 void    print_list(t_list *head);
 void    print_arr_list(t_list **arr);
