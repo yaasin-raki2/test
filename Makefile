@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRCS = main.c remove_quotes.c build_new_expanded_string.c
+SRCS = main.c remove_quotes.c build_new_expanded_string.c flag.c
 
 CC = gcc
 
@@ -13,7 +13,7 @@ INCLUDES = $(LIBFT)/.
 all:
 	@make -C $(LIBFT)
 	@#make bonus -C $(LIBFT)
-	@$(CC) $(FLAGS) $(SRCS) -L $(LIBFT) -lft -lreadline -o $(NAME) -I $(INCLUDES) -fsanitize=address
+	@$(CC) $(FLAGS) $(SRCS) -L $(LIBFT) -lft -lreadline -o $(NAME) -I $(INCLUDES) #-fsanitize=address
 
 clean:
 	@rm -rf $(NAME)

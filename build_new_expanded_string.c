@@ -30,17 +30,17 @@ void generate_string(t_line *l, int len, int x, int j)
     new = (char *)malloc(sizeof(char) * (len + 1));
     while (i < x)
     {
-        new[i] = l->line[i];
+        new[i] = l->temp[i];
         i++;
     }
     k = 0;
     while (l->expanded_var[k])
         new[i++] = l->expanded_var[k++];
-    while (l->line[j])
-        new[i++] = l->line[j++];
+    while (l->temp[j])
+        new[i++] = l->temp[j++];
     new[i] = '\0';
-    free(l->line);
-    l->line = new;
+    free(l->temp);
+    l->temp = new;
 }
 
 int generate_string_len(t_line *l, int j)
@@ -50,12 +50,12 @@ int generate_string_len(t_line *l, int j)
 
     len = ft_strlen(l->expanded_var);
     i = 0;
-    while(l->line[i] && l->line[i] != '$')
+    while(l->temp[i] && l->temp[i] != '$')
     {
         i++;
         len++;
     }
-    while(l->line[j])
+    while(l->temp[j])
     {
         j++;
         len++;
@@ -70,11 +70,32 @@ void build_new_expanded_string(t_line *l, int x)
     char *var;
 
     j = x + 1;
-    while (l->line[j] && (ft_isalpha(l->line[j]) || ft_isdigit(l->line[j]) || l->line[j] == '_'))
+    while (l->temp[j] && (ft_isalpha(l->temp[j]) || ft_isdigit(l->temp[j]) || l->temp[j] == '_'))
         j++;
-    var = ft_substr(l->line, x + 1, j - x - 1);
+    var = ft_substr(l->temp, x + 1, j - x - 1);
     l->expanded_var = get_env_var(l->env, var);
+    free(var);
     len = generate_string_len(l, j);
     generate_string(l, len, x, j);
-    free(l->expanded_var);
+}
+
+void expand(t_line *l)
+{
+    int i;
+    int inside_double_quotes;
+    int inside_single_quotes;
+
+    i = 0;
+    inside_double_quotes = 0;
+    inside_single_quotes = 0;
+    while (l->temp[i])
+    {
+        if (l->temp[i] == '"' && !inside_single_quotes)
+            inside_double_quotes = !inside_double_quotes;
+        else if (l->temp[i] == '\'' && !inside_double_quotes)
+            inside_single_quotes = !inside_single_quotes;
+        if (l->temp[i] == '$' && (inside_double_quotes || (!inside_single_quotes && !inside_double_quotes)))
+            build_new_expanded_string(l, i);
+        i++;
+    }
 }

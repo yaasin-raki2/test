@@ -30,10 +30,15 @@ t_list  parse_chunk(t_line *l);
 
 void    split_plus_plus(char *str, int x);
 
-void    remove_quotes(char *str, char quote_type);
+void    remove_quotes(t_line *l, char quote_type);
 void    build_new_expanded_string(t_line *l,  int x);
+void    expand(t_line *t);
+void    flag_in_quotes(t_line *l);
+void    deflag_in_quotes(char *str);
 
 void    print_list(t_list *head);
 void    print_arr_list(t_list **arr);
 
 #endif //MINISHELL_MINISHELL_H
+
+//  TODO: Handle $"USER" and $'USER' and $ and $$
