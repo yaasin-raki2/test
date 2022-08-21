@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 void    parse_quotes(t_line *l)
 {
     flag_in_quotes(l);

@@ -42,3 +42,10 @@ void    print_arr_list(t_list **arr);
 #endif //MINISHELL_MINISHELL_H
 
 //  TODO: Handle $"USER" and $'USER' and $ and $$
+//  TODO: echo " $USER | '$USER'  $"USER"" $"USER" $$ $
+//  TODO: echo " $USER | '$USER'"  $'USER' $"USER" $$ $
+//  TODO: echo " $USER | '$USER'  $'USER'" $"USER" $$ $
+
+
+// $ && inside_double_quotes && i + 1 == "
+// $ && inside_single_quotes && i + 1 == '
