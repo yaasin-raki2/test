@@ -36,6 +36,8 @@ void    expand(t_line *t);
 void    flag_in_quotes(t_line *l);
 void    deflag_in_quotes(char *str);
 
+void expand_it(t_line *l);
+
 void    print_list(t_list *head);
 void    print_arr_list(t_list **arr);
 
@@ -45,7 +47,3 @@ void    print_arr_list(t_list **arr);
 //  TODO: echo " $USER | '$USER'  $"USER"" $"USER" $$ $
 //  TODO: echo " $USER | '$USER'"  $'USER' $"USER" $$ $
 //  TODO: echo " $USER | '$USER'  $'USER'" $"USER" $$ $
-
-
-// $ && inside_double_quotes && i + 1 == "
-// $ && inside_single_quotes && i + 1 == '

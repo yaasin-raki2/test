@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void    parse_quotes(t_line *l)
+void parse_quotes(t_line *l)
 {
     flag_in_quotes(l);
     l->temp = ft_strdup(l->line);
@@ -13,6 +13,22 @@ void    parse_quotes(t_line *l)
     deflag_in_quotes(l->line);
 }
 
+// int main(int ac, char **av, char **env)
+//{
+//     t_line *l;
+
+//    l = (t_line *)malloc(sizeof(t_line));
+//    l->env = env;
+//    while (1)
+//    {
+//        l->line = readline("$>");
+//        parse_quotes(l);
+//        printf("%s\n", l->line);
+//        //        system("leaks minishell");
+//    }
+//    return (0);
+//}
+
 int main(int ac, char **av, char **env)
 {
     t_line *l;
@@ -22,9 +38,14 @@ int main(int ac, char **av, char **env)
     while (1)
     {
         l->line = readline("$>");
-        parse_quotes(l);
-        printf("%s\n",l->line);
-//        system("leaks minishell");
+        flag_in_quotes(l);
+        l->temp = ft_strdup(l->line);
+        expand_it(l);
+        remove_quotes(l, '"');
+        remove_quotes(l, '\'');
+        deflag_in_quotes(l->temp);
+        printf("%s\n", l->temp);
+        // system("leaks minishell");
     }
     return (0);
 }
