@@ -1,35 +1,40 @@
 #include "minishell.h"
 
-void    flag_in_quotes(t_line *l)
+static void heeelp(t_line *l, int *idq, int *isq, int i)
+{
+    if (l->line[i] == '"' && !(*isq))
+        *idq = !(*idq);
+    else if (l->line[i] == '\'' && !(*idq))
+        *isq = !(*isq);
+    if (l->line[i] == ' ' && (!(*idq) || *isq))
+        l->line[i] = -1;
+    else if (l->line[i] == '|' && (*idq || *isq))
+        l->line[i] = -2;
+    if (l->line[i] == '"' && *isq)
+        l->line[i] = -3;
+    if (l->line[i] == '\'' && *idq)
+        l->line[i] = -4;
+}
+
+void flag_in_quotes(t_line *l)
 {
     int i;
-    int inside_double_quotes;
-    int inside_single_quotes;
+    int idq;
+    int isq;
 
     i = 0;
-    inside_double_quotes = 0;
-    inside_single_quotes = 0;
+    idq = 0;
+    isq = 0;
     while (l->line[i])
     {
-        if (l->line[i] == '"' && !inside_single_quotes)
-            inside_double_quotes = !inside_double_quotes;
-        else if (l->line[i] == '\'' && !inside_double_quotes)
-            inside_single_quotes = !inside_single_quotes;
-        if (l->line[i] == ' ' && (inside_double_quotes || inside_single_quotes))
-            l->line[i] = -1;
-        else if (l->line[i] == '|' && (inside_double_quotes || inside_single_quotes))
-            l->line[i] = -2;
-        if (l->line[i] == '"' && inside_single_quotes)
-            l->line[i] = -3;
-        if (l->line[i] == '\'' && inside_double_quotes)
-            l->line[i] = -4;
+        heeelp(l, &idq, &isq, i);
         i++;
     }
-    if (inside_double_quotes || inside_single_quotes)
+    if (idq || isq)
         printf("Error: Unmatched quotes\n");
 }
 
-void    deflag_in_quotes(char *str)
+void deflag_in_quotes(char *str)
 {
     int i;
 

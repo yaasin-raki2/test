@@ -22,8 +22,7 @@ void remove_one(t_line *l, int x)
 	l->temp = new;
 }
 
-// compare strings until equal sign
-int compare_strings(char *s1, char *s2)
+static int compare_strings(char *s1, char *s2)
 {
 	int i;
 
@@ -35,7 +34,7 @@ int compare_strings(char *s1, char *s2)
 	return (0);
 }
 
-char *get_env(char **environ, char *var)
+static char *get_env(char **environ, char *var)
 {
 	int i;
 	char *path;
@@ -59,7 +58,7 @@ char *get_env(char **environ, char *var)
 	return path;
 }
 
-void again(t_line *l, char *ex, int x, int len)
+static void again(t_line *l, char *ex, int x, int len)
 {
 	int i;
 	int j;
@@ -98,55 +97,5 @@ void build_it(t_line *l, int x)
 	var = ft_substr(l->temp, x, i - x);
 	ex = get_env(l->env, var);
 	free(var);
-	//printf("ex: |%s|\tlen: |%zu|\n", ex, ft_strlen(ex));
 	again(l, ex, x, i - x);
-}
-
-void expand_it(t_line *l)
-{
-	int i;
-	int inside;
-
-	i = 0;
-	inside = 0;
-	while (l->temp[i])
-	{
-		if (l->temp[i] == '"' && inside == 0)
-			inside = 2;
-		else if (l->temp[i] == '\'' && inside == 0)
-			inside = 1;
-		else if (l->temp[i] == '"' && inside == 2)
-			inside = 0;
-		else if (l->temp[i] == '\'' && inside == 1)
-			inside = 0;
-		if (l->temp[i] == '$' && inside == 2)
-		{
-			if (l->temp[i + 1] != '"' && l->temp[i + 1] != -3 && l->temp[i + 1] != -4 && !ft_isalnum(l->temp[i + 1]) && l->temp[i + 1] != '_')
-			{
-				remove_one(l, i);
-				continue;
-			}
-			if (ft_isalnum(l->temp[i + 1]) || l->temp[i + 1] == '_')
-			{
-				remove_one(l, i);
-				build_it(l, i);
-				continue;
-			}
-		}
-		else if (l->temp[i] == '$' && inside == 0)
-		{
-			if (l->temp[i + 1] == '"' || l->temp[i + 1] == '\'')
-			{
-				remove_one(l, i);
-				continue;
-			}
-			else if (ft_isalnum(l->temp[i + 1]) || l->temp[i + 1] == '_')
-			{
-				remove_one(l, i);
-				build_it(l, i);
-				continue;
-			}
-		}
-		i++;
-	}
 }
